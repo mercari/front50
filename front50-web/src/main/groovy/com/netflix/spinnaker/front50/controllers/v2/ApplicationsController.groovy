@@ -108,7 +108,11 @@ public class ApplicationsController {
   Application create(@RequestBody final Application app) {
     Application createdApplication = getApplication().initialize(app).withName(app.getName()).save()
     try {
-      fiatService.ifPresent { it.sync() }
+      // Note:
+      // Disable triggering fiat permission sync because it make fiat unstable when there are many roles.
+      // This is a temporary solution until https://github.com/spinnaker/front50/pull/995 gets merged.
+      log.info("skip fiat permission sync: ApplicationsController#create");
+      // fiatService.ifPresent { it.sync() }
     } catch (Exception ignored) {
       log.warn("failed to trigger fiat permission sync", ignored)
     }
