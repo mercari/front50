@@ -27,7 +27,6 @@ import com.netflix.spinnaker.front50.model.application.ApplicationPermissionDAO;
 import com.netflix.spinnaker.kork.exceptions.SystemException;
 import com.netflix.spinnaker.kork.web.exceptions.NotFoundException;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -182,7 +181,13 @@ public class ApplicationPermissionsService {
 
     if (fiatConfigurationProperties.getRoleSync().isEnabled()) {
       try {
-        fiatService.get().sync(new ArrayList<>(roles));
+        // Note:
+        // Disable triggering fiat permission sync because it make fiat unstable when there are many
+        // roles.
+        // This is a temporary solution until https://github.com/spinnaker/front50/pull/995 gets
+        // merged.
+        log.info("skip fiat permission sync: ApplicationPermissionsService#syncUsers");
+        // fiatService.get().sync(new ArrayList<>(roles));
       } catch (RetrofitError e) {
         log.warn("Error syncing users", e);
       }
