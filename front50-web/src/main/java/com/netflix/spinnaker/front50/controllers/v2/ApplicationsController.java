@@ -130,7 +130,7 @@ public class ApplicationsController {
         // roles.
         // This is a temporary solution until https://github.com/spinnaker/front50/pull/995 gets
         // merged.
-        log.info("skip fiat permission sync: ApplicationPermissionsService#syncAllUsers");
+        log.info("skip fiat permission sync: ApplicationPermissionsService#creat");
         // fiatService.get().sync();
       } catch (Exception e) {
         log.warn("failed to trigger fiat permission sync", e);
