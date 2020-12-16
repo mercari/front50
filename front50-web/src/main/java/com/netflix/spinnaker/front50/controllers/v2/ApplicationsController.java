@@ -125,7 +125,13 @@ public class ApplicationsController {
         && fiatConfigurationProperties.getRoleSync().isEnabled()
         && fiatService.isPresent()) {
       try {
-        fiatService.get().sync();
+        // Note:
+        // Disable triggering fiat permission sync because it make fiat unstable when there are many
+        // roles.
+        // This is a temporary solution until https://github.com/spinnaker/front50/pull/995 gets
+        // merged.
+        log.info("skip fiat permission sync: ApplicationsController#create");
+        // fiatService.get().sync();
       } catch (Exception e) {
         log.warn("failed to trigger fiat permission sync", e);
       }
